@@ -58,19 +58,21 @@ public class DagpengerKalkulator {
 
     /**
      * Sjekker om en person har rettighet til dagpenger eller ikke.
-     * @return om personen har rett på dagpenger.
+     * @return om personen har rett på dagpenger basert på G(grunnlønn).
      */
     public boolean harRettigheterTilDagpenger() {
-        boolean harRettigheter = false;
+    // Sjekker om gjennomsnittlig lønn de siste 3 årene er >= 3G
+    boolean harRettigheterBasertPåGjennomsnittslønn = 
+        summerNyligeÅrslønner(3) >= grunnbeløpVerktøy.hentTotaltGrunnbeløpForGittAntallÅr(3);
+    
+    // Sjekker om lønn fra siste år er >= 1,5G
+    boolean harRettigheterBasertPåSisteÅrslønn = 
+        hentÅrslønnVedIndeks(0).hentÅrslønn() >= grunnbeløpVerktøy.hentMinimumÅrslønnForRettPåDagpenger();
+    
+    // Returnerer sann hvis en av betingelsene er oppfylt
+    return harRettigheterBasertPåGjennomsnittslønn || harRettigheterBasertPåSisteÅrslønn;
+    };
 
-        if (summerNyligeÅrslønner(3) >= grunnbeløpVerktøy.hentTotaltGrunnbeløpForGittAntallÅr(3)) {
-            harRettigheter = true;
-        } else if (hentÅrslønnVedIndeks(0).hentÅrslønn() >= grunnbeløpVerktøy.hentMinimumÅrslønnForRettPåDagpenger()) {
-            harRettigheter = true;
-        }
-
-        return harRettigheter;
-    }
 
     /**
      * Velger hva som skal være beregnings metode for dagsats ut ifra en person sine årslønner.
