@@ -21,7 +21,7 @@ public class Saksbehandler extends DagpengerKalkulator {
     * @see initResponsMap
     */
     public Saksbehandler(DagpengerKalkulator dagpengerKalkulator) {
-       this.dagpengerKalkulator_ = dagpengerKalkulator;
+       this.dagpengerKalkulator_= dagpengerKalkulator;
        this.initResponsMap();
     }
 
@@ -52,16 +52,16 @@ public class Saksbehandler extends DagpengerKalkulator {
     * Hvis brukeren har rett, vises en bekreftelse og det beregnes hvor mye dagpenger de har rett på.
     * @see RegnUtDagPenger
     */
-    public void BehandlLønn() {
+    public void behandleSøknad() {
         //Behandle om det ikker er nok lønn
-        if (!dagpengerKalkulator_.harRettigheterTilDagpenger()) {
+        if (!dagpengerKalkulator_.getHarRettPåDagslønn()) {
             System.out.println(responsMap.get("IKKE_NOK_LØNN"));
             return;
         } 
         //Behandle søknad er nok lønn
         System.out.println(responsMap.get("HAR_RETT_PÅ_DAGPENGER"));
         System.out.println("Regner ut hvor mye dagpenger du har rett på................⏳⌛️");
-        RegnUtDagPenger();
+        regnUtDagPenger();
     };
 
 
@@ -71,25 +71,23 @@ public class Saksbehandler extends DagpengerKalkulator {
    * den valgte metoden i dagpengerKalkulator_.velgBeregningsMetode().
    * @see RegnUtTotalDagpengr
    */
-    public void RegnUtDagPenger() {
+    public void regnUtDagPenger() {
         //Printer ut riktig Behandlings metode vha sin dagpengerKalkulator_.velgBeregningsMetode() resultater
-        switch (dagpengerKalkulator_.velgBeregningsMetode()) {
+        switch (dagpengerKalkulator_.getBeregningsMetode()) {
             case SISTE_ÅRSLØNN:
                 System.out.println(responsMap.get("SISTE_ÅRSLØNN"));
-                RegnUtTotalDagpengr();
                 break;
             case GJENNOMSNITTET_AV_TRE_ÅR:
                 System.out.println(responsMap.get("GJENNOMSNITTET_AV_TRE_ÅR"));
-                RegnUtTotalDagpengr();
                 break;
             case MAKS_ÅRLIG_DAGPENGERGRUNNLAG:
                 System.out.println(responsMap.get("MAKS_ÅRLIG_DAGPENGERGRUNNLAG"));
-                RegnUtTotalDagpengr();
                 break;
             default:
                 System.out.println("❌ Ugyldig beregningsmetode");
                 return;
-        };
+        }
+        RegnUtTotalDagpengr();
     };
 
    /**
@@ -98,7 +96,7 @@ public class Saksbehandler extends DagpengerKalkulator {
     */
    public void RegnUtTotalDagpengr() {
         //henter resultat for sum av dagpenger 
-        this.totalDagsPenger = dagpengerKalkulator_.kalkulerDagsats();
+        this.totalDagsPenger = dagpengerKalkulator_.getDagsatsVerdi();
         System.out.println(responsMap.get("VIS_TOTAL_DAG_PENGER"));  System.out.println(this.totalDagsPenger);
    };
 
