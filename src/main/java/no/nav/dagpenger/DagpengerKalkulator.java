@@ -25,9 +25,12 @@ import java.util.List;
 public class DagpengerKalkulator {
 
     public final GrunnbeløpVerktøy grunnbeløpVerktøy;
-    public final int arbeidsdagerIÅret = 260;
+    public final int ARBEIDSDAGER_PER_ÅR = 260;
     public final List<Årslønn> årslønner;
 
+    /**
+     * enum: Alle regne  metoder
+     */
     public enum beregningsMetoder{
         SISTE_ÅRSLØNN,
         GJENNOMSNITTET_AV_TRE_ÅR,
@@ -47,21 +50,22 @@ public class DagpengerKalkulator {
      */
     public double kalkulerDagsats() {
         double dagsats = 0;
+
         //Har ikke rett på Dagpenger
         if(!harRettigheterTilDagpenger()){
             return dagsats;
         };
 
-        // Beregn dagsats basert på valgt metode
+        // Beregn dagsats basert på valgt metode 
         switch (velgBeregningsMetode()) {
             case SISTE_ÅRSLØNN:
-                dagsats = Math.ceil(hentÅrslønnVedIndeks(0).hentÅrslønn() / this.arbeidsdagerIÅret);
+                dagsats = Math.ceil(hentÅrslønnVedIndeks(0).hentÅrslønn() / this.ARBEIDSDAGER_PER_ÅR);
                 break;
             case GJENNOMSNITTET_AV_TRE_ÅR:
-                dagsats = Math.ceil((summerNyligeÅrslønner(3) / 3) / this.arbeidsdagerIÅret);
+                dagsats = Math.ceil((summerNyligeÅrslønner(3) / 3) / this.ARBEIDSDAGER_PER_ÅR);
                 break;
             case MAKS_ÅRLIG_DAGPENGERGRUNNLAG:
-                dagsats = Math.ceil(grunnbeløpVerktøy.hentMaksÅrligDagpengegrunnlag() / this.arbeidsdagerIÅret);
+                dagsats = Math.ceil(grunnbeløpVerktøy.hentMaksÅrligDagpengegrunnlag() / this.ARBEIDSDAGER_PER_ÅR);
                 break;
             default: return 0;
         }
@@ -110,6 +114,10 @@ public class DagpengerKalkulator {
 
 
 
+   /**
+   * Legger til Årslønn i array og sorterer lønnene.
+   * @param årslønn Årslønn objektet som skal legges til.
+   */
     public void leggTilÅrslønn(Årslønn årslønn) {
         this.årslønner.add(årslønn);
         this.sorterÅrslønnerBasertPåNyesteÅrslønn();
