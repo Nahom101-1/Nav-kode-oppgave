@@ -1,8 +1,6 @@
 package no.nav.saksbehandler;
 
-// import java.util.ArrayList;
 import java.util.HashMap;
-// import java.util.List;
 import java.util.Map;
 
 import no.nav.dagpenger.DagpengerKalkulator;
@@ -10,7 +8,7 @@ import no.nav.dagpenger.DagpengerKalkulator;
 public class Saksbehandler extends DagpengerKalkulator {
 
     private Map<String, String> responsMap = new HashMap<>();
-    private DagpengerKalkulator dagpengerKalkulator_;
+    private DagpengerKalkulator dagpengerKalkulator;
     private double totalDagsPenger = 0;
 
     /**
@@ -21,7 +19,7 @@ public class Saksbehandler extends DagpengerKalkulator {
     * @see initResponsMap
     */
     public Saksbehandler(DagpengerKalkulator dagpengerKalkulator) {
-       this.dagpengerKalkulator_= dagpengerKalkulator;
+       this.dagpengerKalkulator= dagpengerKalkulator;
        this.initResponsMap();
     }
 
@@ -31,13 +29,14 @@ public class Saksbehandler extends DagpengerKalkulator {
     private void initResponsMap() {
         //Respon ved for lav lønn
         responsMap.put("IKKE_NOK_LØNN", "😞 Beklager, men du har dessverre ikke rett på dagpenger på grunn av for lav inntekt. " +
-        "For å kvalifisere, må du ha en gjennomsnittlig lønn de siste tre årene på minst 3G eller en lønn fra det siste året på minst 1.5G. 💔");
+        "For å kvalifisere, må du ha en gjennomsnittlig lønn de siste tre årene på minst 3X grunnlønnen eller en lønn fra det siste året på minst 1.5 x grunnlønnen. 💔");
+
         //Respons ved rett på dag penger
         responsMap.put("HAR_RETT_PÅ_DAGPENGER", 
          "🎉 Gratulerer! Du oppfyller kravene for dagpenger! 💰 " +
          "Dette betyr at du kan motta støtte under arbeidsledighet. " +
-         "Din gjennomsnittlig lønn de siste tre årene er minst 3G eller " +
-         "er din lønn fra det siste året på minst 1.5G.\n\n");
+         "Din gjennomsnittlig lønn de siste tre årene er minst 3x grunnlønnen eller " +
+         "er din lønn fra det siste året på minst 1.5x grunnlønnen.\n\n");
         //Respons med beregning metode:
         responsMap.put("SISTE_ÅRSLØNN", "📅 Vi kalkulerer dagpengene dine basert på lønnen din fra det siste året.");
         responsMap.put("GJENNOMSNITTET_AV_TRE_ÅR", "📊 Vi kalkulerer dagpengene dine basert på gjennomsnittlig lønn de tre siste årene.");
@@ -54,7 +53,7 @@ public class Saksbehandler extends DagpengerKalkulator {
     */
     public void behandleSøknad() {
         //Behandle om det ikker er nok lønn
-        if (!dagpengerKalkulator_.getHarRettPåDagslønn()) {
+        if (!dagpengerKalkulator.getHarRettPåDagslønn()) {
             System.out.println(responsMap.get("IKKE_NOK_LØNN"));
             return;
         } 
@@ -68,12 +67,12 @@ public class Saksbehandler extends DagpengerKalkulator {
 
    /**
    * Behandler beregningsmetoden for dagpenger basert på resultatene fra 
-   * den valgte metoden i dagpengerKalkulator_.velgBeregningsMetode().
+   * den valgte metoden i kalkulator.velgBeregningsMetode().
    * @see RegnUtTotalDagpengr
    */
     public void regnUtDagPenger() {
-        //Printer ut riktig Behandlings metode vha sin dagpengerKalkulator_.velgBeregningsMetode() resultater
-        switch (dagpengerKalkulator_.getBeregningsMetode()) {
+        //Printer ut riktig Behandlings metode vha sin kalkulator.velgBeregningsMetode() resultater
+        switch (dagpengerKalkulator.getBeregningsMetode()) {
             case SISTE_ÅRSLØNN:
                 System.out.println(responsMap.get("SISTE_ÅRSLØNN"));
                 break;
@@ -87,16 +86,16 @@ public class Saksbehandler extends DagpengerKalkulator {
                 System.out.println("❌ Ugyldig beregningsmetode");
                 return;
         }
-        RegnUtTotalDagpengr();
+        regnUtTotalDagpengr();
     };
 
    /**
     * Behandler totalen av dagpengene basert på den valgte metoden.
-    *  @see dagpengerKalkulator_.kalkulerDagsats for å få dagsatsen for den totale beregningen.
+    *  @see dagpengerKalkulator. for å få dagsatsen for den totale beregningen.
     */
-   public void RegnUtTotalDagpengr() {
+   public void regnUtTotalDagpengr() {
         //henter resultat for sum av dagpenger 
-        this.totalDagsPenger = dagpengerKalkulator_.getDagsatsVerdi();
+        this.totalDagsPenger = dagpengerKalkulator.getDagsatsVerdi();
         System.out.println(responsMap.get("VIS_TOTAL_DAG_PENGER"));  System.out.println(this.totalDagsPenger);
    };
 
